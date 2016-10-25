@@ -1,0 +1,100 @@
+CSE 332 Lab 0: Ranks, Suits, Cards and Files
+
+Due by Tuesday September 20th, 2016, at 11:59 pm
+(deadline for receipt of an e-mail with an attached zip file with your solution)
+Final grade percentage: 5 percent
+
+Objective:
+
+This lab is intended to familiarize you with basic program structure, data movement and execution control concepts, including:
+C++ header files and C++ source files,
+C++ STL input and output streams,
+C++ functions,
+C++ precompiler directives,
+basic C++ data types (including enumerations and C style and C++ style strings), and
+basic uses of structs
+To do this, you will implement a simple C++ program that can (1) read in and parse command line arguments, (2) open a file and read in strings from it, and (3) parse those strings as the definitions of cards in a standard playing deck for bridge, cribbage, poker, etc. Your program will print out what was read and parsed from the file so you can check easily that it worked correctly.
+
+In subsequent lab assignments you will use these features to generate sets of cards, generate different combinations of the cards in a set, and order the different combinations according to various scoring functions.
+
+Assignment:
+
+Part I - Readings:
+
+The following readings in the required text book may be useful as reference material while working on this lab assignment, and though we'll touch on most of the issues in the next few studio sessions, selectively looking up topics and/or reading ahead (on demand as you encounter issues while working on the lab) in the text book, lecture slides, and studio exercises is encouraged:
+C++ variables and basic data types: [LLM] Chap. 1, 2
+C++ strings, vectors, arrays, and IO: [LLM] Chap. 3 (and skim 8)
+C++ Expressions: [LLM] Chap. 4
+C++ Statements: [LLM] Chap. 5
+C++ Functions: [LLM] Chap. 6
+Please review the CSE 332 Programming Guidelines, and follow them as you develop your solution to this assignment. Guidelines on which we will focus in grading your solution for this lab are: A.1-A.11, A.15-A.17, B.1, B.13, B.15, B.16, B.20-B.24, B.29, B.32, and C.1-C.8.
+Part II - Program Design and Implementation:
+
+Open up Visual Studio 2015, and create a new Visual C++ Win32 Console Application Visual C++ project for lab 0.
+In the header file and a source files that were created in your project (and if you'd like to add additional header and source files feel free to do so), you will declare and define (respectively) the functions, structs, and other features of your program as you implement this assignment. As you develop your code, please use good modularity: for example, if a function's logic has several separable parts (or is long enough to fill the editor's window) you may want to break it up into other smaller functions.
+Note:even at this early stage the details of this assignment are intentionally slightly under-specified, leaving you some room to choose what you think is the best way to implement them, as long as what you do is reasonable and you explain your design decisions in comments in the code and in your Readme.txt file.
+
+Add a new C++ header (.h) file and a new C++ source (.cpp) file to your program and in them declare and define (respectively) a struct to represent a "playing card" (of type Card) that declares an enumeration for the different suits a card can have (clubs, diamonds, hearts, spades), another enumeration for the different ranks a card can have (two, three, four, five, six, seven, eight, nine, ten, jack, queen, king, ace), a member variable of the suit enumeration type, and a member variable of the rank enumeration type. Don't forget to include the header file for this struct in any source file that uses the struct type or the enumeration types it contains.
+Declare and define a function for parsing a file (for example card_file.txt) containing text (character) strings that define different playing cards (we'll call these "card definition strings").
+The card definition strings in such a file are separated by spaces, tabs, line breaks, or other forms of whitespace. Valid card definition strings in a file must be either two or three characters long. The last character of a valid card definition string encodes a card's suit (and must be C or c for clubs, D or d for diamonds, H or h for hearts, or S or s for spades). The first character encodes (or for a rank of 10, the first two characters encode) the rank of the card (and are 2, 3, 4, 5, 6, 7, 8, 9, 10, J or j for jack, Q or q for queen, K or k for king, and A or a for ace).
+
+The file parsing function should take two parameters: a reference to a Standard Template library (STL) vector of card structs (of type vector<Card> &), and a C-style string (of type char *). This function should use the C-style string given in the second function parameter as the name of a file, open the file, and then read one card definition string at a time from that file until there are no more strings to read.
+
+Each time a valid card definition string is read (invalid strings simply should be ignored), the function should push back a card struct instance with the rank and suit encoded in the string, into the vector that was passed as the first parameter. If the file cannot be opened or the function encounters any other problems (other than badly formed card strings, which it should skip over and keep processing good ones) during its execution it should print out a helpful error message indicating the problem and return a non-zero integer value; otherwise it should return 0 to indicate success.
+
+Declare and define a function for printing out a vector of card structs to the standard output stream. The function should take a reference to a const vector of card structs (of type const vector<Card> &) as its only parameter and should print out valid card definition strings (with each string on its own line) for each of the card struct instances contained in the passed vector (hint: first construct each string and then use cout to print it). If the function encounters any problems during its execution it should print out a helpful error message indicating the problem and return a non-zero integer value; otherwise it should return 0 to indicate success.
+Declare and define a helpful "usage message" function that (1) prints out (to the program's standard output stream) the program's name followed by a helpful usage message telling the user how to run the program correctly (with the name of the program and the name of a file to read, e.g., lab0 card_file.txt), and (2) returns a non-zero value.
+For your project's main function:
+Modify the signature of your main function so that it matches the one shown in the second example given in the C++ program structure and development environment slides (the one that uses the variable names argc and argv).
+Check that exactly one argument has been passed to the program (in addition to the program's name). If not, the program should call the usage message function and return the value returned from that call.
+Declare a vector of card structs (of type vector<Card>), and pass that vector and the first program argument (after the program name) to the function that parses a file of card definition strings.
+If that function returns a non-zero value the program should return that value, or otherwise the program should pass the vector to the function that will print it out, and then check the integer value returned from that function and if it's non-zero return it (note that the next step can be combined with this one by simply returning the result returned by the function).
+
+Upon completion, if no errors have occurred, the program should return 0 to indicate success.
+Build your project, and fix any errors or warnings that occur. Please be sure to note all of the different kinds of errors or warnings you ran into (though you don't have to list every instance of each kind) in your ReadMe.txt file. If you were fortunate enough not to run into any errors or warnings, please note that instead, where you would have listed errors or warnings in your ReadMe.txt file.
+Open up a Windows console (terminal) window and change to the directory where your program's executable file was created by Visual Studio (see the first studio exercises document for more details on this).
+Run the executable program through a series of trials that test it with good coverage of cases involving both well formed and badly formed inputs. For this lab, an especially useful test is to check whether the output printed by your program consistently represents the contents of valid card strings from the file whose name it was given. Another one is to check the return code produced by the program, which you can get by running the program in the terminal window and then just after it finishes running issuing the command echo %errorlevel% which prints out the value of the %errorlevel% environment variable where the result returned by the most recently run program is always kept.
+In your ReadMe.txt file please document which cases you ran (i.e., what the command lines were) and summarize what your program did and whether that is correct behavior, in each case.
+
+In your ReadMe.txt file, make sure that your name and the lab number (lab 0) are at the top of the file, and that you've documented whether you ran into any errors or warnings while developing your solution (and if so what they were) and what the executable program did for each of the trials you ran. Be sure to save your changes to your ReadMe.txt file, as well as those to your source (and header) file(s) before preparing your solution zip file.
+Prepare a zip file that contains your project's source, header, and ReadMe.txt files (except for stdafx.h, stdafx.cpp, or other Windows-generated files you did not modify), by:
+Creating a new lab0 folder on your Windows desktop;
+Copying the appropriate files (here, ReadMe.txt, and the source and header files where you wrote your code, but not the files that were created by Visual Studio such as stdafx.h, targetver.h, or stdafx.cpp) from Visual Studio into that folder; and then
+Right-clicking on the folder and selecting the Send To->Compressed (zipped) Folder item in the menu that appears.
+Send the zip file containing your lab 0 solution as an e-mail attachment to the course e-mail account (cse332@seas.wustl.edu) by the submission deadline for this assignment. If you need to make changes to your lab solution you are welcome to send a new zip file, and we will grade the latest one received prior to the deadline (according to the time stamp the server puts on the e-mail).
+
+Part III - Linux Programming Environment: (optional, worth up to 5% extra credit)
+
+The goal of this optional part of the assignment is to practice using the Linux environment to compile and run your program on the shell.cec.wustl.edu server. For extra credit, please add a section marked "Extra Credit" at the end of the ReadMe.txt file you submit with your solution, and copy the terminal output that results from setting up, compiling, and running your code on Linux (as described below) from the secure shell window into the "Extra Credit" section of your ReadMe.txt file.
+Please ask for help from your professor or teaching assistants if you are uncertain about how to do this extra credit part or if you run into any difficulty with it:
+
+Click on your Windows lab computer's All Programs->Internet->SSH Secure Shell->Secure Shell Client menu item to open up a secure shell protocol (SSH) terminal window. Click on the Quick Connect tool bar item near the top of that window. In the dialog box that appears, type shell.cec.wustl.edu for the Host Name, enter your login id and press the Connect button. Type in your password and click OK, in the window that appears. You should then see a Linux command prompt (a string of characters including possibly some combination of your id, the machine's name, and the current directory). Copy and paste that command prompt string into your ReadMe.txt file as the answer for this part of the extra credit exercise.
+Use the mkdir command to create a cse332 directory where you will store your programs during the course, i.e.,
+
+mkdir cse332
+Change to that directory, create a lab0 subdirectory in it, and change to that subdirectory:
+
+cd cse332
+mkdir lab0
+cd lab0
+
+Note that you can also issue multiple commands in sequence by placing semicolons between them:
+
+mkdir cse332 ; mkdir cse332/lab0 ; cd cse332/lab0
+
+Click on your computer's All Programs->Internet->SSH Secure Shell->Secure File Transfer Client menu item to open up a secure file transfer window, and log in as you did in the secure shell window described above. It should bring up a listing of your main account directory, with the cse332 directory underneath. Open up the cse332 directory and then the lab0 directory inside of it by double clicking on them.
+On your Windows machine, open up the folder where Visual Studio put your source and header files for the project (except for stdafx.h and stdafx.cpp), and drag and drop them into the lab0 directory in your secure file transfer window. Also download the following Makefile to your desktop, and drag and drop it into the lab0 directory window of the secure file transfer client as well.
+Back in the secure shell client, if necessary use the mv command change the name of the file you just added from Makefile.txt to just Makefile (Windows sometimes "helpfully" adds the .txt extension even though the name Makefile is what the make command you'll use expects the file's name to be).
+
+In the secure shell client, use an editor to open up the files you have just transfered into the Linux lab0 directory, and update them as follows:
+In the Makefile, fill in what you want the name of the executable program file to be, at the end of the line where it says EXECUTABLE =
+In the Makefile, add the name(s) of your source file(s), separated by spaces if more than one of them, to the end of the line where it says CMPL_SRCS =
+In the Makefile, add the name(s) of your header file(s), separated by spaces if more than one of them, to the end of the line where it says HEADER_FILES =
+Wherever you have included the stdafx.h file (or for that matter any other windows-specific) in your source and/or header files, comment out that line (but only on the Linux platform - uncomment those lines on Windows).
+After saving the changes to your Makefile, exit the editor and run the make command to build your program. Please document any errors or warnings you encountered on Linux, or if there were none please indicate that instead, in the extra credit section of your ReadMe.txt file. Fix any errors or warnings you see on Linux, and please ask for help from your Professor or TAs if you have any difficulty with this.
+Once your program compiles with no errors or warnings, run the same trials you ran in the Windows environment, on Linux.
+Hint:Many terminal window shells in the Linux environment require you to put a leading ./ (saying to find the program in the current directory) before the name of the executable program when you run it, as in:
+
+./lab0.exe card_file.txt
+
+Copy the results of those trials into your ReadMe.txt file, in the extra credit section.
