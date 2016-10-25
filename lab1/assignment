@@ -1,0 +1,74 @@
+CSE 332 Lab 1: Cards, Hands, and Scores
+
+Due by Tuesday, October 4th at 11:59 pm (deadline for receipt of an e-mail with a zip file containing your solution)
+Final grade percentage: 7 percent
+
+Objective:
+
+This lab is intended to extend your use of basic C++ language features from the previous lab, and to introduce more advanced techniques like the use of member operators and algorithms from the C++ STL, including:
+adding a less-than comparison operator (operator<) to a struct, and
+using the STL sort algorithm to order objects
+To do this, you will implement a simple C++ program that can (1) read sets of 5 cards from a file, sort the cards in each set into ascending order by rank and then suit, and then assign a score to the set based on its rank in poker (assuming a single standard 52 card deck with no wild cards).
+
+In this lab and in the subsequent labs, you are encouraged to re-use and modify code from your previous lab solutions - if you choose do this, please put a completely new copy of any header and source files from your previous lab(s) in the new lab project directory you create. This can avoid some potential for error or confusion within Visual Studio, and also ensures you have a backup copy that you could go back to if a modification you try doesn't pan out.
+
+Assignment:
+
+Part I - Readings:
+
+The following readings in the course text book may be useful as reference material while working on this lab assignment, and though we'll touch on most of the issues in the next few studio sessions, selectively looking up topics and/or reading ahead (on demand as you encounter issues while working on the lab) is encouraged:
+STL sort algorithm: [LLM] pp. 384-387, 876
+file streams: [LLM] pp. 316-320
+The C++ string class, file input and output stream, and input and output stringstream examples in the lecture slides also again may be helpful when implementing parts this lab.
+Please re-review the CSE 332 Programming Guidelines from the Lab 0 assignment, and again follow them as you develop your solution to this assignment. Guidelines on which we will focus in grading your solution for this lab are: A.1-A.11, A.15-A.17, B.1, B.13, B.15, B.16, B.20-B.24, B.29, B.32, and C.1-C.8.
+Please read the following additional CSE 332 Programming Guidelines which are relevant to this lab, and please also follow them as you implement your solution: A.13, A.14, B.2, B.10-B.12, B.17, B.25, B.28, B.31, and B.33.
+Part II - Program Design and Implementation:
+
+Note: the details of this assignment are again intentionally somewhat under-specified, leaving you some room to choose what you think is the best way to implement them, as long as what you do is reasonable and you explain your design decisions in comments in the code and in your Readme.txt file. Also note that your lab 1 project will extend your lab 0 solution by modifying some features and adding others.
+
+Open up Visual Studio, and create a new Win32 Console Application Visual C++ project for lab 1. Copy the header and source files from the directory where they reside in your lab 0 project, into the corresponding directory in your lab 1 project, and then add the copied files to your lab 1 project. Copying the entire files rather than just linking to the original ones is strongly encouraged so that (1) you'll have a duplicate to fall back on if something goes wrong, and (2) Visual Studio is much less likely to confuse include, execution, and debugging directories that way.
+If you have not done so already in lab 0, modify your usage message function so that it takes in two strings: one giving the name of the program (which will always be given to the main function in argv[0]), and another giving the rest of the information to convey to the user. As in the lab 0 assignment, the function should print out the program name and how to run the program using those arguments, and should return a non-zero integer.
+Add a const less than operator (operator<) to your card struct from lab 0, and define it so that it orders the cards by rank (in ascending order) and then by suit (also in ascending order).
+Modify the function from lab 0 that reads in cards from a file with a slightly richer structure (such as hands.txt) so that it:
+reads a line at a time from the file,
+reads card definition strings from that line until it either reaches the end of the line or it sees a // (comment symbol) in the line,
+prints a warning message for any invalid card definition strings it sees but still continues processing the line if so,
+checks whether or not it read exactly 5 valid card definition strings from the line (not fewer and not more) and if so pushes back 5 cards corresponding to those strings, into the vector that was passed to it (if it reads more or fewer than 5 it should generate a warning message but continue to process other lines from the file).
+Declare and define a function that takes a reference to a const vector of cards as a parameter (for example of type const vector<Card> &) and taking five cards at a time in the vector (i.e., cards in positions 0-4, and then 5-9, etc. in the vector) prints out the poker hand rank of that group of cards:
+straight flush: the 5 cards are consecutive in rank and have the same suit;
+four of a kind: 4 of the 5 cards have the same rank;
+full house: 3 of the 5 cards have the same rank and the other 2 have the same rank;
+flush: the 5 cards are not all consecutive in rank but have the same suit;
+straight: the 5 cards are all consecutive in rank but do not all have the same suit;
+three of a kind: 3 of the 5 cards have the same rank and the other 2 cards have different ranks;
+two pairs: 2 of the 5 cards have the same rank, another of the 2 cards are of a different rank, and the other card is of a different rank;
+one pair: 2 of the 5 cards have the same rank and the other 3 cards have different ranks;
+no rank: none of the other ranks apply.
+Hint: these ranks are much easier to determine if the cards in each set of 5 are sorted according to your card struct's less than operator, but you cannot just sort the entire vector since that may (likely) lose the groupings of the cards into hands. One straightforward way to get around this is to use an additional vector variable to hold 5 cards at a time, sort the cards in that additional vector, and then figure out the ranking. A more advanced and more efficient approach (though more susceptible to arithmetic mistakes) is to exploit two random-access properties of the vector's iterators which we'll cover later on in the semester: you can add a number to them to get another iterator, and you can also compare them for ordering (e.g., you can write expressions like v.begin()+5 < v.end() ).
+
+In your main function, after the cards have been read into the vector from the file, pass the vector into the function that prints out a poker hand rank for each group of five cards. Your main function should then call the STL sort algorithm to sort the entire vector according to the less than operator you defined in your card struct, and should then print out the cards in the order they appear in the sorted array.
+Build your project, and fix any errors or warnings that occur. Please be sure to note all of the different kinds of errors or warnings you ran into (though you don't have to list every instance of each kind) in your ReadMe.txt file. If you were fortunate enough not to run into any errors or warnings, please note that instead, where you would have listed errors or warnings in your ReadMe.txt file.
+Open up a Windows console (terminal) window and change to the directory where your program's executable file was created by Visual Studio (see the early studio exercises for more details on this, if you don't remember them).
+Run the executable program through a series of trials that test it with good coverage of cases involving both well formed and badly formed inputs. For this lab one especially useful test is to check whether the output printed by your program consistently represents the contents of each valid input file it was given. In your ReadMe.txt file please document which cases you ran (i.e., what the command lines were) and summarize what your program did and whether that is correct behavior, in each case.
+In your ReadMe.txt file, make sure that your name and the lab number (lab 1) are at the top of the file, and that you've documented whether you ran into any errors or warnings while developing your solution (and if so what they were) and what the executable program did for each of the trials you ran. Be sure to save your changes to your ReadMe.txt file, as well as those to your source (and header) file(s) before preparing your solution zip file.
+Prepare a zip file that contains your project's source, header, and ReadMe.txt files (except for stdafx.h, stdafx.cpp or other Windows-generated files you did not modify), by:
+Creating a new lab1 folder on your Windows desktop;
+Copying the appropriate files (here, ReadMe.txt, and the source and header files where you wrote your code) from Visual Studio into that folder; and then
+Right-clicking on the folder and selecting the Send To->Compressed (zipped) Folder item in the menu that appears.
+Send the zip file containing your lab 1 solution as an e-mail attachment to the course e-mail account (cse332@seas.wustl.edu) by the submission deadline for this assignment. If you need to make changes to your lab solution you are welcome to send a new zip file, and we will grade the latest one received prior to the deadline (according to the time stamp the server puts on the e-mail).
+
+Part III - Extra Credit: Sorting Hands by Rank and Within each Rank (optional, worth up to 5% extra credit)
+
+The goal of this optional part of the assignment is to build on the code you wrote in the main portion of the assignment and give you additional experience working with the techniques involved.
+Please ask for help from your professor or teaching assistant if you are uncertain about how to do this extra credit part or if you run into any difficulty with it:
+
+Modify the function that prints out the rank group of each hand so that before printing them out it sorts the hands in order from highest ranking hand to lowest ranking hand. In addition to sorting them by rank group, the function must also sort the hands within each rank group as follows:
+two straight flush hands are sorted by the highest card in each hand;
+two four of a kind hands are sorted by the rank of the 4 cards that have the same rank;
+two full house hands are sorted by the rank of the 3 cards that have the same rank and then by the rank of the 2 cards that have the same rank;
+two flush hands are sorted by highest ranking card, then by the next highest ranking card, etc.;
+two straight hands are sorted by the highest card in each hand;
+two three of a kind hands are sorted by the rank of the 3 cards that have the same rank;
+two two pair hands are sorted by the rank of the higher pair, then by the rank of the lower pair, and then by the 5th card;
+two one pair hands are sorted by the rank of the pair, then by the highest unpaired card, then the next highest unpaired card, and then by the next highest unpaired card;
+two unranked hands are sorted by highest ranking card, then by the next highest ranking card, etc.
